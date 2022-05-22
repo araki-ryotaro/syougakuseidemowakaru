@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>演算子</title>
+  </head>
+  <body>
+    <script>
+      // var day = 31 - 17;
+      // if (a == 30) {
+        var date = new Date();
+        // 年
+        var year = date.getFullYear();
+        // 月
+        var month = date.getMonth() + 1;
+        // 日
+        var day = date.getDate();
+
+        // eom = end of month(月末)
+        var eom = new Date(year, month, 0).getDate();
+        alert(eom - day);
+      // }
+    </script>
+  </body>
+</html>
