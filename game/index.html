@@ -3,13 +3,30 @@
   <head>
     <meta charset="UTF-8">
     <title>キャラクターの表示</title>
+    <style>
+      #rico {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+      }
+    </style>
   </head>
   <body>
     <!-- HTMLで画像を表示 -->
     <!-- <img src="rico.png"> -->
-    <script>
-      document.write( '<img src="rico.png">' );
-    </script>
 
+
+    <script>
+      // 画面に画像を表示する
+      document.write( '<img id="rico" src="rico.png">' );
+
+      // キャラクターを動かす
+      var y = 0;
+      document.getElementById('rico').onclick = function() {
+        y += 32;
+        document.getElementById('rico').style.top = y + "px";
+      }
+
+    </script>
   </body>
 </html>
