@@ -3,8 +3,11 @@
       document.write( '<img id="rico" src="rico.png">' );
 
       // キャラクターの位置
-      var y = 0;
-      var x = 0;
+      var rico = new Object();
+      rico.x = 0;
+      rico.y = 0;
+      // var y = 0;
+      // var x = 0;
 
       // なにかキーが押されたとき、keydownという関数を呼び出す
       addEventListener( "keydown", keydownfunc );
@@ -16,20 +19,20 @@
         var key_code = event.keyCode;
 
         // 「左ボタン」が押されたとき、xの値から32を引き算する
-        if( key_code === 37 ) x -= 32;
+        if( key_code === 37 ) rico.x -= 32;
 
         // 「上ボタン」が押されたとき、yの値から32を引き算する
-        if( key_code === 38 ) y -= 32;
+        if( key_code === 38 ) rico.y -= 32;
 
         // 「右ボタン」が押されたとき、xの値から32を足し算する
-        if( key_code === 39 ) x += 32;
+        if( key_code === 39 ) rico.x += 32;
 
         // 「左ボタン」が押されたとき、yの値から32を足し算する
-        if( key_code === 40 ) y += 32;
+        if( key_code === 40 ) rico.y += 32;
 
         // りこちゃんの画像の位置を反映させる
-        document.getElementById( 'rico' ).style.top = y + "px";
-        document.getElementById( 'rico' ).style.left = x + "px";
+        document.getElementById( 'rico' ).style.top = rico.y + "px";
+        document.getElementById( 'rico' ).style.left = rico.x + "px";
 
       }
       // キャラクターを動かす
