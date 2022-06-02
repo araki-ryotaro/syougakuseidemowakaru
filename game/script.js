@@ -6,10 +6,16 @@
       // var y = 0;
       // var x = 0;
 
+      // りこちゃんのオブジェクトを作成
       var rico = new Object();
       rico.x = 0;
       rico.y = 0;
+      rico.move = 0;
 
+      // 押されたキーを入れておくための変数
+      var pressed_key = '';
+
+      // キーボードのオブジェクトを作成
       var key = new Object();
       key.up = false;
       key.down = false;
@@ -24,14 +30,42 @@
         // キーボードが離されたとき、keyupfunc関数を呼び出す
         addEventListener( "keyup", keyupfunc );
 
+        // rico.moveが0のとき、りこちゃんが移動する準備をする
+        if( rico.move === 0) {
+          if( key.left === true)  {
+            rico.move = 32;
+            pressed_key = 'left';
+          }
+          if( key.up === true ) {
+            rico.move = 32;
+            pressed_key ='up';
+          }
+          if( key.right === true ) {
+            rico.move = 32;
+            pressed_key = 'right';
+          }
+          if( key.down === true ) {
+            rico.move = 32;
+            pressed_key = 'down';
+          }
+        }
         // 「左ボタン」が押されたとき、xの値から32を引き算する
-        if( key.left === true ) rico.x -= 32;
+        // if( key.left === true ) rico.x -= 32;
         // 「上ボタン」が押されたとき、yの値から32を引き算する
-        if( key.up === true ) rico.y -= 32;
+        // if( key.up === true ) rico.y -= 32;
         // 「右ボタン」が押されたとき、xの値から32を足し算する
-        if( key.right === true ) rico.x += 32;
+        // if( key.right === true ) rico.x += 32;
         // 「左ボタン」が押されたとき、yの値から32を足し算する
-        if( key.down === true ) rico.y += 32;
+        // if( key.down === true ) rico.y += 32;
+
+        // rico.moveが0より大きいとき、りこちゃんが移動する
+        if( rico.move > 0 ) {
+          rico.move -= 4;
+          if( pressed_key === 'left' ) rico.x -= 4;
+          if( pressed_key === 'up' ) rico.y -= 4;
+          if( pressed_key === 'right' ) rico.x += 4;
+          if( pressed_key === 'down' ) rico.y += 4;
+        }
 
         // りこちゃんの画像の位置を反映させる
         document.getElementById( 'rico' ).style.top = rico.y + "px";
