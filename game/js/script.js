@@ -17,10 +17,19 @@
       rico.y = 0;
       rico.move = 0;
 
+      // マッチアップのImageオブジェクトを作る
       // 画像のオブジェクトを作る
       var mapchip = new Image();
       mapchip.src = 'img/map.png';
-
+      
+      // キーボードのオブジェクトを作成
+      var key = new Object();
+      key.up = false;
+      key.down = false;
+      key.right = false;
+      key.left = false;
+      key.push = '';
+      
       // マップの作成
       var map = [
         [0, 0, 1, 0, 1, 0, 0, 0 ,0 ,1 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,0],
@@ -46,82 +55,96 @@
       ];
 
       // マッチアップを表示する
-      addEventListener('load', function() {
-        for (var y=0; y<map.length; y++) {
-          for (var x=0; x<map[y].length; x++) {
-            if ( map[y][x] === 0 ) ctx.drawImage( mapchip, 0, 0, 32, 32, 32*x, 32*y, 32, 32);
-            if ( map[y][x] === 1 ) ctx.drawImage( mapchip, 32, 0, 32, 32, 32*x, 32*y, 32, 32);
-          }
-        }
-      }, false);
+      // addEventListener('load', function() {
+      // }, false);
       
-      // キーボードのオブジェクトを作成
-      var key = new Object();
-      key.up = false;
-      key.down = false;
-      key.right = false;
-      key.left = false;
-      key.push = '';
-
       // 画面に画像を表示する
       // document.write( '<img id="rico" src="rico.png">' );
       // addEventListener('load', function() {
-      //   ctx.drawImage(img, 0, 0, 32, 32, 0, 0, 32, 32);
-      //   ctx.drawImage(img, 32, 0, 32, 32, 0, 64, 32, 32);
-      // }, false);
-      
-      // 画像のオブジェクトを作成
-      // var img = new Image();
-      // img.src = 'img/rico.png';
-      
-      // function main() {
+        //   ctx.drawImage(img, 0, 0, 32, 32, 0, 0, 32, 32);
+        //   ctx.drawImage(img, 32, 0, 32, 32, 0, 64, 32, 32);
+        // }, false);
         
-      //   requestAnimationFrame(main);
-      // }
-      
-      // キャラクターの位置
-      // var y = 0;
-      // var x = 0;
-      
-      
-      // 押されたキーを入れておくための変数
-      // var pressed_key = '';
-      
-      
-      // メインループ
-      function main() {
+        // 画像のオブジェクトを作成
+        // var img = new Image();
+        // img.src = 'img/rico.png';
         
-        // 塗りつぶす色を指定
-        ctx.fillStyle = "rgb(0, 0, 0)";
-        // x=0, y=0 の位置に縦横30pxの正方形を描く
-        // 塗りつぶす
-        ctx.fillRect(0, 0, 640, 640);
-        
-        // 画像を表示
-        ctx.drawImage(rico.img, rico.x, rico.y);
-        
-        // キーボードが押されたとき、keydownfunc関数を呼び出す
+        // function main() {
+          //   requestAnimationFrame(main);
+          // }
+          
+          // キャラクターの位置
+          // var y = 0;
+          // var x = 0;
+          
+          // 押されたキーを入れておくための変数
+          // var pressed_key = '';
+          
+          // メインループ
+          function main() {
+            
+            // 塗りつぶす色を指定
+            ctx.fillStyle = "rgb(0, 0, 0)";
+            // x=0, y=0 の位置に縦横30pxの正方形を描く
+            // 塗りつぶす
+            ctx.fillRect(0, 0, 640, 640);
+            
+            for (var y=0; y<map.length; y++) {
+              for (var x=0; x<map[y].length; x++) {
+                if ( map[y][x] === 0 ) ctx.drawImage( mapchip, 0, 0, 32, 32, 32*x, 32*y, 32, 32);
+                if ( map[y][x] === 1 ) ctx.drawImage( mapchip, 32, 0, 32, 32, 32*x, 32*y, 32, 32);
+              }
+            }
+            
+            // 画像を表示
+            ctx.drawImage(rico.img, rico.x, rico.y);
+            
+            // キーボードが押されたとき、keydownfunc関数を呼び出す
         addEventListener( "keydown", keydownfunc, false );
         // キーボードが離されたとき、keyupfunc関数を呼び出す
         addEventListener( "keyup", keyupfunc, false );
         
         // rico.moveが0のとき、りこちゃんが移動する準備をする
-        if( rico.move === 0) {
-          if( key.left === true)  {
-            rico.move = 32;
-            pressed_key = 'left';
+        if( rico.move === 0 ) {
+          if( key.left === true ) {
+            var x = rico.x/32;
+            var y = rico.y/32;
+            x--;
+            if(map[y][x] === 0) {
+              rico.move = 32;
+              key.push = 'left';
+            }
           }
           if( key.up === true ) {
-            rico.move = 32;
-            pressed_key ='up';
+            var x = rico.x/32;
+            var y = rico.y/32;
+            if(y > 0) {
+              y--;
+              if(map[y][x] === 0) {
+                rico.move = 32;
+                key.push = 'up';
+              }
+            }
           }
           if( key.right === true ) {
-            rico.move = 32;
-            pressed_key = 'right';
+            var x = rico.x/32;
+            var y = rico.y/32;
+            x++;
+            if(map[y][x] === 0) {
+              rico.move = 32;
+              key.push = 'right';
+            }
           }
           if( key.down === true ) {
-            rico.move = 32;
-            pressed_key = 'down';
+            var x = rico.x/32;
+            var y = rico.y/32;
+            if(y < 19) {
+              y++;
+              if(map[y][x] === 0) {
+                rico.move = 32;
+                key.push = 'down';
+              }
+            }
           }
         }
         // 「左ボタン」が押されたとき、xの値から32を引き算する
@@ -136,10 +159,10 @@
         // rico.moveが0より大きいとき、りこちゃんが移動する
         if( rico.move > 0 ) {
           rico.move -= 4;
-          if( pressed_key === 'left' ) rico.x -= 4;
-          if( pressed_key === 'up' ) rico.y -= 4;
-          if( pressed_key === 'right' ) rico.x += 4;
-          if( pressed_key === 'down' ) rico.y += 4;
+          if( key.push === 'left' ) rico.x -= 4;
+          if( key.push === 'up' ) rico.y -= 4;
+          if( key.push === 'right' ) rico.x += 4;
+          if( key.push === 'down' ) rico.y += 4;
         }
         
         // りこちゃんの画像の位置を反映させる
@@ -168,6 +191,7 @@
       if( key_code === 39 ) key.right = true;
       // 「左ボタン」が押されたとき、key.downをtrueにする
       if( key_code === 40 ) key.down = true;
+      // 方向キーでブラウザがスクロールしないようにする
       event.preventDefault();
       }
 
