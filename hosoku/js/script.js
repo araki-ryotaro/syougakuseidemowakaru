@@ -91,14 +91,18 @@
 // 【文字表示】：
 'use strict';
 
+const str = '吾輩は猫である。名前はまだ無い。どこで生まれたかとんと見当がつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていたことだけは記憶して居る。';
+
 // ゲームのオブジェクトを640x480サイズで作る
 let game = new Game( 640, 480 );
 
 // ラベルオブジェクトを作る
-let label = new Label( 'こんにちは' );
+let label = new Label( str );
+label.interval = 10;
+label.maxLength = 32;
 
 // add()を使って、ゲームにラベルを表示
-game.add( label, 20, 40 );
+game.add( label, 0, 0 );
 
 // ゲームスタート
 game.start();
