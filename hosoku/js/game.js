@@ -57,6 +57,8 @@ class Game {
 class Label {
   // Labelの初期設定
   constructor(label) {
+    // 表示している場所の行数
+    this._visibleLine = 0;
     this._text = [];
     // 表示している文字列の長さ
     this._displayLength = 0;
@@ -70,6 +72,13 @@ class Label {
     this.interval = 0;
   }
 
+  // 次の行への切り替え機能
+  next() {
+    this._visibleLine++;
+    this._text = [];
+    this._displayLength = 0;
+  }
+
   // Labelを表示するための関数（メインループから呼び出される）
   render(ctx, frame) {
     ctx.fillStyle = this.color;
@@ -79,11 +88,11 @@ class Label {
     // 文字を表示する感覚が0の場合は、文字を一気に表示
     if (this.interval === 0) {
       // 表示する文字数を、1行に表示する最大の文字数で割り、切り上げることで、その文字列が何行になるのかがわかる
-      this._line = Math.ceil(this.label.length / this.maxLength);
+      this._line = Math.ceil(this.label[ this._visibleLine ].length/this.maxLength);
       // 文字列の行数だけ繰り返す
       for (var i = 0; i < this._line; i++) {
         this._text[i] = this._text[i] || '';
-        this._text[i] = this.label.substr(i * this.maxLength, this.maxLength);
+        this._text[i] = this.label[ this._visibleLine ].substr(i * this.maxLength, this.maxLength);
         // 文字列の表示
         ctx.fillText(this._text[i], this.x, this.y + (i * 25));
       }
@@ -91,16 +100,16 @@ class Label {
 
     // 文字を表示する間隔が0以外の場合、一文字ずつ表示していく
     else {
-      if (this._displayLength < this.label.length && frame % this.interval === 0) {
+      if (this._displayLength < this.label[ this._visibleLine ].length && frame % this.interval === 0) {
         this._text[this._line] = this._text[this._line] || '';
         // this.labelに代入されている文字列を、this_text[this._line]に一文字ずつ入れていく
-        this._text[this._line] += this.label.charAt(this._displayLength);
+        this._text[this._line] += this.label[ this._visibleLine ].charAt(this._displayLength);
         this._displayLength++;
         if (this._displayLength % this.maxLength === 0) {
           this._line++;
         }
       }
-      for (var i = 0; i < this._line + 1; i++) {
+      for (var i=0; i < this._line + 1; i++) {
         this._text[i] = this._text[i] || '';
         ctx.fillText(this._text[i], this.x, this.y + (i * 25));
       }

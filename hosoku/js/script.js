@@ -91,18 +91,31 @@
 // 【文字表示】：
 'use strict';
 
-const str = '吾輩は猫である。名前はまだ無い。どこで生まれたかとんと見当がつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていたことだけは記憶して居る。';
+const str = [
+  '吾輩は猫である。',
+  '名前はまだ無い。',
+  'どこで生まれたかとんと見当がつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶して居る。'
+];
 
 // ゲームのオブジェクトを640x480サイズで作る
 let game = new Game( 640, 480 );
 
 // ラベルオブジェクトを作る
 let label = new Label( str );
-label.interval = 10;
+label.interval = 5;
 label.maxLength = 32;
 
 // add()を使って、ゲームにラベルを表示
 game.add( label, 0, 0 );
+
+// キーボードが押されたとき
+addEventListener( "keydown", () => {
+  const key_code = event.keyCode;
+  // 先ほど登録したスペースキーが押された時、label.next()を実装
+  if( key_code === 32 )label.next();
+  // 方向キーでブラウザがスクロールしないようにする
+  event.preventDefault();
+}, false);
 
 // ゲームスタート
 game.start();
