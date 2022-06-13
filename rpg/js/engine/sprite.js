@@ -33,6 +33,8 @@ class Sprite {
   update( canvas ) {
     // 画像などを画面に表示するためのメソッドを呼び出す
     this.render( canvas );
+    // スプライトを動かしたり、なにかのきっかけでイベントを発生させたりするために使うメソッドを呼び出す
+    this.onenterframe();
   } // update() 終了
 
   /**
@@ -64,4 +66,10 @@ class Sprite {
       this.height
       );
   } // render() 終了
+
+  /**
+   * 常に呼び出され、スプライトの移動やイベントの発生などに使うメソッド。空なのはオーバーライド（上書き）して使うため
+   */
+  onenterframe() {}
+  
 }

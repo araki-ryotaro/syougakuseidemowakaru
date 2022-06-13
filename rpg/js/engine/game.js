@@ -20,16 +20,62 @@ class Game {
 
     // ゲームに登場する全てのもの（オブジェクト）を入れるための配列
     this.objs = [];
+
+    // ゲームに使用するキーと、そのキーが押されているかどうかを入れるための連想配列
+    // 例 { up: false, down: false }
+    this.input = {};
+    // 登録されたキーに割り当てられたプロパティ名と、キー名を、関連付けるための連想配列
+    // 例{ up : "ArrowUp", down: "ArrowDown" }
+    this._keys = {};
   } // constructor() 終了
+
 
   /**
    * startメソッドを呼び出すことで、メインループが開始される
    */
   start() {
+    // デフォルトのキーバインドを登録する（使いたいキーを登録する）
+    this.keybind( 'up', 'ArrowUp' );
+    this.keybind( 'down', 'ArrowDown' );
+    this.keybind( 'right', 'ArrowRight' );
+    this.keybind( 'left', 'ArrowLeft' );
+
     // メインループを呼び出す
     this._mainLoop();
+
+    // イベントリスナーをセットする
+    this._setEventListener();
   } // start() 終了
-  
+
+  /**
+   * イベントリスナーをセットするためのメソッド
+   */
+  _setEventListener() {
+    // なにかキーが押されたときと、離されたときに呼ばれる
+    const _keyEvent = e => {
+      // デフォルトのイベントを発生させない
+      e.preventDefault();
+      // _keysに登録された数だけ繰り返す
+      for ( let key in this._keys ) {
+        // イベントのタイプによって呼び出すメソッドを変える
+        switch ( e.type ) {
+          case 'keydown' :
+            // 押されたキーが登録されたキーの中に存在するとき、inputのそのキーをtrueにする
+            if ( e.key === this._keys[key] ) this.input[key] = true;
+            break;
+          case 'keyup' :
+             // 押されたキーが、登録されたキーの中に存在するとき、inputのそのキーをfalseにする
+             if ( e.key === this._keys[key] ) this.input[key] = false;
+             break;
+        }
+      }
+    }
+    // なにかキーが押されたとき
+    addEventListener( 'keydown', _keyEvent, { passive: false } );
+    // キーが離れたとき
+    addEventListener( 'keyup', _keyEvent, { passive: false } );
+  } // _setEventListener() 終了
+
   /**
    * メインループ
    */
@@ -46,7 +92,7 @@ class Game {
       // スプライトやテキストなど、全てのオブジェクトのupdateメソッドを呼び出す
       this.objs[i].update( this.canvas );
     }
-  
+
     // 自分自身（_mainLoop）を呼び出して、ループさせる
     requestAnimationFrame( this._mainLoop.bind( this ) );
   } // _mainLoop() 終了
@@ -60,4 +106,17 @@ class Game {
     // this.objs配列の末尾に、objの値を追加
     this.objs.push( obj );
   } // add() 終了
+
+  /**
+   * 使いたいキーを登録できるようになる、keybindメソッドを作成
+   * 引数
+   * name : キーに着ける名前
+   * key : キーコード
+   */
+  keybind( name, key ) {
+    // キーの名前と、キーコードを関連付ける
+    this._keys[name] = key;
+    // キーが押されているかどうかを入れておく変数に、まずはfalseを代入しておく
+    this.input[name] = false;
+  } // keybind() 終了
 }
