@@ -33,7 +33,7 @@ addEventListener( 'load', () => {
   scene.add( tilemap );
 
   // 変数yamadaに、あなたは山田先生のスプライト画像ですよ、と教える
-  const yamada = new Sprite( 'img/yamada.png' );
+  const yamada = new Tile( 'img/yamada.png' );
   // sceneに、山田先生のスプライト画像を追加して、とお願いする
   scene.add( yamada );
 
