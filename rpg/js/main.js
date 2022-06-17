@@ -32,10 +32,10 @@ addEventListener( 'load', () => {
   // マップを登録する
   scene.add( tilemap );
 
-  // 変数yamadaに、あなたは山田先生のスプライト画像ですよ、と教える
+  // 変数yamadaに、あなたは山田先生のタイルですよ、と教える
   const yamada = new Tile( 'img/yamada.png' );
-  // sceneに、山田先生のスプライト画像を追加して、とお願いする
-  scene.add( yamada );
+  // tilemapに、山田先生のタイルを追加して、とお願いする
+  tilemap.add( yamada );
 
   // ループから常に呼び出される
   scene.onenterframe = () => {
