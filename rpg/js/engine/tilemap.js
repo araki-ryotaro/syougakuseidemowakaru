@@ -19,6 +19,8 @@ class Tilemap {
     this.img.src = img;
     // 画像の初期位置
     this.x = this.y = 0;
+    // 数値によってタイルマップを移動させることが出来る（移動速度）
+    this.vx = this.vy = 0;
     // 引数sizeが指定されていない場合、this.sizeに32を代入
     this.size = size || 32;
     // 二次元配列で数値を入力すると、マップを作ることが出来る
@@ -48,6 +50,9 @@ class Tilemap {
     this.render( canvas );
     // 常に呼び出される、オーバーライド用のメソッドを呼び出す
     this.onenterframe();
+    // タイルマップを移動する
+    this.x += this.vx;
+    this.y += this.vy;
 
     // タイルの数だけ繰り返す
     for ( let i=0; i<this.tiles.length; i++ ) {

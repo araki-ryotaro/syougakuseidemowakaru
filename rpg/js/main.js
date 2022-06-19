@@ -46,6 +46,8 @@ addEventListener( 'load', () => {
 
   // ループから常に呼び出される
   scene.onenterframe = () => {
+    // タイルマップの移動速度に0を代入する
+    tilemap.vx = tilemap.vy = 0;
     // キーが押されたとき、山田先生が移動する
     if ( game.input.left ) tilemap.x -= WALKING_SPEED;
     if ( game.input.right ) tilemap.x += WALKING_SPEED;

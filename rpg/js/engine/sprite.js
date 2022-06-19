@@ -23,6 +23,8 @@ class Sprite {
     this.height = height || 32;
     // 何番目の画像を表示するか
     this.frame = 0;
+    // 数値によってスプライトを移動させることgはできる（移動速度）
+    this.vx = this.vy = 0;
   } // constructor() 終了
 
   /**
@@ -35,6 +37,9 @@ class Sprite {
     this.render( canvas );
     // スプライトを動かしたり、なにかのきっかけでイベントを発生させたりするために使うメソッドを呼び出す
     this.onenterframe();
+    // スプライトを移動する
+    this.x += this.vx;
+    this.y += this.vy;
   } // update() 終了
 
   /**
