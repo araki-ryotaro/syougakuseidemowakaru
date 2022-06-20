@@ -37,6 +37,22 @@ addEventListener( 'load', () => {
   // マップを登録する
   scene.add( tilemap );
 
+  // 変数startに、あなたはスタートのタイルですよ、と教える
+  const start = new Tile( 'img/start.png' );
+  // マップ左上からの座標を指定する
+  start.x = TILE_SIZE;
+  start.y = TILE_SIZE*2;
+  // スタートのタイルを、tilemapに追加して、とお願いする
+  tilemap.add( start );
+
+  // 変数goalに、あなたはゴールのタイルですよ、と教える
+  const goal = new Tile( 'img/goal.png' );
+  // マップ左上からの座標を指定する
+  goal.x = TILE_SIZE*8;
+  goal.y = TILE_SIZE*8;
+  // ゴールのタイルを、tilemapに追加して、とお願いする
+  tilemap.add( goal );
+
   // 変数yamadaに、あなたは山田先生のタイルですよ、と教える
   const yamada = new Tile( 'img/yamada.png' );
   // 山田先生を画面の中央を配置
@@ -46,13 +62,16 @@ addEventListener( 'load', () => {
 
   // ループから常に呼び出される
   scene.onenterframe = () => {
-    // タイルマップの移動速度に0を代入する
-    tilemap.vx = tilemap.vy = 0;
-    // キーが押されたとき、山田先生が移動する
-    if ( game.input.left ) tilemap.x -= WALKING_SPEED;
-    if ( game.input.right ) tilemap.x += WALKING_SPEED;
-    if ( game.input.up ) tilemap.y -= WALKING_SPEED;
-    if ( game.input.down ) tilemap.y += WALKING_SPEED;
+    // タイルマップの位置がタイルのサイズで割り切れるとき
+    if ( ( tilemap.x - TILE_SIZE/2 ) % TILE_SIZE === 0 && ( tilemap.y - TILE_SIZE/2 ) % TILE_SIZE === 0 ) {
+      // タイルマップの移動速度に0を代入する
+      tilemap.vx = tilemap.vy = 0;
+      // キーが押されたとき、山田先生が移動する
+      if ( game.input.left ) tilemap.vx = WALKING_SPEED;
+      if ( game.input.right ) tilemap.vx = -1 * WALKING_SPEED;
+      if ( game.input.up ) tilemap.vy = WALKING_SPEED;
+      if ( game.input.down ) tilemap.vy = -1 * WALKING_SPEED;
+    }
   } // yamada.onenterframe 終了
   // gameに、山田先生のスプライト画像を表示して、とお願いする
   // game.add( yamada );

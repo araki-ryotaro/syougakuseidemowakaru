@@ -56,6 +56,9 @@ class Tilemap {
 
     // タイルの数だけ繰り返す
     for ( let i=0; i<this.tiles.length; i++ ) {
+      // タイルマップの位置の分、それぞれのタイルの位置をずらす
+      this.tiles[i].shiftX = this.x;
+      this.tiles[i].shiftY = this.y;
       // それぞれのタイルのupdateメソッドを呼び出す
       this.tiles[i].update( canvas );
     }

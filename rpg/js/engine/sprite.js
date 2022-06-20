@@ -25,6 +25,8 @@ class Sprite {
     this.frame = 0;
     // 数値によってスプライトを移動させることgはできる（移動速度）
     this.vx = this.vy = 0;
+    // スプライトの位置を、数値の分、ずらすことができる
+    this.shiftX = this.shiftY = 0;
   } // constructor() 終了
 
   /**
@@ -33,6 +35,10 @@ class Sprite {
    * canvas : 紙（キャンバス）
    */
   update( canvas ) {
+    // キャンバスの外にスプライトがあるとき、ここでのメソッドを終了する
+    if ( this.x + this.shiftX < -1 * this.width || this.x + this.shiftX > canvas.width ) return;
+    if ( this.y + this.shiftY < -1 * this.height || this.y + this.shiftY > canvas.height ) return;
+
     // 画像などを画面に表示するためのメソッドを呼び出す
     this.render( canvas );
     // スプライトを動かしたり、なにかのきっかけでイベントを発生させたりするために使うメソッドを呼び出す
@@ -65,8 +71,8 @@ class Sprite {
       this.height * _frameY,
       this.width,
       this.height,
-      this.x,
-      this.y,
+      this.x + this.shiftX,
+      this.y + this.shiftY,
       this.width,
       this.height
       );
