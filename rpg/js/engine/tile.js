@@ -15,6 +15,8 @@ class Tile extends Sprite {
     super( img, size, size );
     // 引数sizeが指定されていない場合、this.sizeに32を代入
     this.size = size || 32;
+    // タイルマップと同期して動くかどうか
+    this.isSynchronize = true;
   } // constructor() 終了
 
 }

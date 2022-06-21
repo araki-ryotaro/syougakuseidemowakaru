@@ -57,6 +57,8 @@ addEventListener( 'load', () => {
   const yamada = new Tile( 'img/yamada.png' );
   // 山田先生を画面の中央を配置
   yamada.x = yamada.y = TILE_SIZE*5 - TILE_SIZE/2;
+  // タイルマップの動きと同期させない
+  yamada.isSynchronize = false;
   // tilemapに、山田先生のタイルを追加して、とお願いする
   tilemap.add( yamada );
 
