@@ -34,6 +34,8 @@ addEventListener( 'load', () => {
   // マップ全体の位置をずらす
   tilemap.x = TILE_SIZE*4 - TILE_SIZE/2;
   tilemap.y = TILE_SIZE*3 - TILE_SIZE/2;
+  // 移動できないタイルを指定する
+  tilemap.obstacles = [0, 3, 6, 7, 8, 9, 10, 11];
   // マップを登録する
   scene.add( tilemap );
 
@@ -70,11 +72,20 @@ addEventListener( 'load', () => {
       tilemap.vx = tilemap.vy = 0;
       // キーが押されたとき、山田先生が移動する
       if ( game.input.left ) tilemap.vx = WALKING_SPEED;
-      if ( game.input.right ) tilemap.vx = -1 * WALKING_SPEED;
-      if ( game.input.up ) tilemap.vy = WALKING_SPEED;
-      if ( game.input.down ) tilemap.vy = -1 * WALKING_SPEED;
+      else if ( game.input.right ) tilemap.vx = -1 * WALKING_SPEED;
+      else if ( game.input.up ) tilemap.vy = WALKING_SPEED;
+      else if ( game.input.down ) tilemap.vy = -1 * WALKING_SPEED;
+
+      // 移動後のマップ座標を求める
+      const yamadaCoordinateAfterMoveX = yamada.mapX - tilemap.vx/WALKING_SPEED;
+      const yamadaCoordinateAfterMoveY = yamada.mapY - tilemap.vy/WALKING_SPEED;
+      // もし移動後のマップ座標に障害物があるならば、移動量に0を代入する
+      if ( tilemap.hasObstacle( yamadaCoordinateAfterMoveX, yamadaCoordinateAfterMoveY ) ) tilemap.vx = tilemap.vy = 0;
+
+      // コンソールにマップ座標を表示
+      // console.log( `${yamada.mapX} ${yamada.mapY}` );（削除）
     }
-  } // yamada.onenterframe 終了
+  } // scene.onenterframe 終了
   // gameに、山田先生のスプライト画像を表示して、とお願いする
   // game.add( yamada );
 
