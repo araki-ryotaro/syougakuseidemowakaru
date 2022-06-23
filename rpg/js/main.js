@@ -55,8 +55,10 @@ addEventListener( 'load', () => {
   // ゴールのタイルを、tilemapに追加して、とお願いする
   tilemap.add( goal );
 
+  // 変数yamadaに、あなたは山田先生のキャラクタータイルですよ、と教える
+  const yamada = new CharacterTile( 'img/yamada.png' );
   // 変数yamadaに、あなたは山田先生のタイルですよ、と教える
-  const yamada = new Tile( 'img/yamada.png' );
+  // const yamada = new Tile( 'img/yamada.png' );
   // 山田先生を画面の中央を配置
   yamada.x = yamada.y = TILE_SIZE*5 - TILE_SIZE/2;
   // タイルマップの動きと同期させない
@@ -64,24 +66,53 @@ addEventListener( 'load', () => {
   // tilemapに、山田先生のタイルを追加して、とお願いする
   tilemap.add( yamada );
 
+//キャラクターのアニメーションのための変数
+	let toggleForAnimation = 0;
+
   // ループから常に呼び出される
   scene.onenterframe = () => {
     // タイルマップの位置がタイルのサイズで割り切れるとき
     if ( ( tilemap.x - TILE_SIZE/2 ) % TILE_SIZE === 0 && ( tilemap.y - TILE_SIZE/2 ) % TILE_SIZE === 0 ) {
       // タイルマップの移動速度に0を代入する
       tilemap.vx = tilemap.vy = 0;
+      // 山田先生の画像を切り替える
+      yamada.animation = 1;
+      // 方向キーが押されているときは、タイルマップの移動速度と、山田先生の向きに、それぞれの値を代入する
+      if ( game.input.left ) {
+        tilemap.vx = WALKING_SPEED;
+        yamada.direction = 1;
+      }
+      else if ( game.input.right ) {
+        tilemap.vx = -1 * WALKING_SPEED;
+        yamada.direction = 2;
+      }
+      else if ( game.input.up ) {
+        tilemap.vy = WALKING_SPEED;
+        yamada.direction = 3;
+      }
+      else if ( game.input.down ) {
+        tilemap.vy = -1 * WALKING_SPEED;
+        yamada.direction = 0;
+      }
       // キーが押されたとき、山田先生が移動する
-      if ( game.input.left ) tilemap.vx = WALKING_SPEED;
-      else if ( game.input.right ) tilemap.vx = -1 * WALKING_SPEED;
-      else if ( game.input.up ) tilemap.vy = WALKING_SPEED;
-      else if ( game.input.down ) tilemap.vy = -1 * WALKING_SPEED;
+      // if ( game.input.left ) tilemap.vx = WALKING_SPEED;
+      // else if ( game.input.right ) tilemap.vx = -1 * WALKING_SPEED;
+      // else if ( game.input.up ) tilemap.vy = WALKING_SPEED;
+      // else if ( game.input.down ) tilemap.vy = -1 * WALKING_SPEED;
 
       // 移動後のマップ座標を求める
       const yamadaCoordinateAfterMoveX = yamada.mapX - tilemap.vx/WALKING_SPEED;
       const yamadaCoordinateAfterMoveY = yamada.mapY - tilemap.vy/WALKING_SPEED;
       // もし移動後のマップ座標に障害物があるならば、移動量に0を代入する
       if ( tilemap.hasObstacle( yamadaCoordinateAfterMoveX, yamadaCoordinateAfterMoveY ) ) tilemap.vx = tilemap.vy = 0;
-
+    }
+    // タイルマップのXとY座標両方がタイルのサイズで割り切れるとき以外で、タイルの半分のサイズで割り切れるとき
+    else if ( ( tilemap.x + TILE_SIZE/2 ) % ( TILE_SIZE/2 ) === 0 && ( tilemap.y + TILE_SIZE/2 ) % ( TILE_SIZE/2 ) === 0 ) {
+      // 0と1を交互に取得できる
+      toggleForAnimation ^= 1;
+      // toggleForAnimationの数値によって、山田先生の画像を切り替える
+      if ( toggleForAnimation === 0 ) yamada.animation = 2;
+      else yamada.animation = 0;
       // コンソールにマップ座標を表示
       // console.log( `${yamada.mapX} ${yamada.mapY}` );（削除）
     }
