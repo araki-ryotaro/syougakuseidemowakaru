@@ -66,8 +66,10 @@ addEventListener( 'load', () => {
   // tilemapに、山田先生のタイルを追加して、とお願いする
   tilemap.add( yamada );
 
-//キャラクターのアニメーションのための変数
+  //キャラクターのアニメーションのための変数
 	let toggleForAnimation = 0;
+  // ゴールのテキストが表示されているかどうかの変数
+  let hasDisplayedGoalText = false;
 
   // ループから常に呼び出される
   scene.onenterframe = () => {
@@ -77,6 +79,24 @@ addEventListener( 'load', () => {
       tilemap.vx = tilemap.vy = 0;
       // 山田先生の画像を切り替える
       yamada.animation = 1;
+      // 山田先生のタイルがゴールのタイルと重なっているとき、イベントを発生させる
+      if ( yamada.isOverlapped( goal ) ) {
+        // ゴールのテキストが表示されていない時
+        if ( !hasDisplayedGoalText ) {
+          // 変数goalTextに、あなたは「ゴールだべ！」というテキストだよ、と教える
+          const goalText = new Text( 'ゴールだべ！' );
+          // テキストサイズ変更
+          goalText.size = 50;
+          // テキストの位置
+          goalText.x = 15;
+          goalText.y = 135;
+          // シーンにテキストを追加
+          scene.add( goalText );
+          // ゴールのテキストが表示されているかどうかの変数にtrueを代入
+          hasDisplayedGoalText = true;
+        }
+      }
+
       // 方向キーが押されているときは、タイルマップの移動速度と、山田先生の向きに、それぞれの値を代入する
       if ( game.input.left ) {
         tilemap.vx = WALKING_SPEED;

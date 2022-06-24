@@ -15,8 +15,12 @@ class Scene {
    * obj : スプライトやテキストなど（オブジェクト）
    */
   add( obj ) {
+    // 引数がSprite、Text、Tilemapのとき、this.objの末尾にobjを追加
+    if ( obj instanceof Sprite || obj instanceof Text || obj instanceof Tilemap ) this.objs.push( obj );
+    // 引数がSprite、Text、Tilemapでなければ、コンソールにエラーを表示
+    else console.error( 'Sceneに追加できるのはSprite、Text、Tilemapだけだよ！');
     // this.objsの末尾に、objを追加
-    this.objs.push( obj );
+    // this.objs.push( obj );
   } // add() 終了
 
   /**Gameクラスのメインループからずっと呼び出され続ける
@@ -32,5 +36,5 @@ class Scene {
    * 常に呼び出され、スプライトの移動やイベントの発生などに使うメソッド。空なのはオーバーライド（上書き）して使うため
    */
   onenterframe() {}
-  
+
 }

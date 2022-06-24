@@ -21,4 +21,20 @@ class Tile extends Sprite {
     this.isSynchronize = true;
   } // constructor() 終了
 
+  /**
+   * タイル同士が重なっているかどうかを取得できるメソッド
+   * 引数
+   * tile : 重なっているかを判定したいタイル
+   */
+  isOverlapped( tile ) {
+    // タイル同士が重なっているかどうか
+    if ( tile instanceof Tile ) {
+
+      const _isOverlapped = ( this.mapX === tile.mapX && this.mapY === tile.mapY );
+      // タイル同士が重なっているかどうかの結果を返す
+      return _isOverlapped;
+    }
+    // 引数がTileでなければ、コンソールにエラーを表示
+    else console.error( 'Tilemapに追加できるのはTileだけだよ' );
+  } // isOverlapped() 終了
 }
