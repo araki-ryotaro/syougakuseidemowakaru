@@ -70,6 +70,8 @@ addEventListener( 'load', () => {
 	let toggleForAnimation = 0;
   // ゴールのテキストが表示されているかどうかの変数
   let hasDisplayedGoalText = false;
+  // 移動可能かどうかの変数
+  let isMovable = true;
 
   // ループから常に呼び出される
   scene.onenterframe = () => {
@@ -88,43 +90,50 @@ addEventListener( 'load', () => {
           // テキストサイズ変更
           goalText.size = 50;
           // テキストの位置
-          goalText.x = 15;
-          goalText.y = 135;
+          // goalText.x = 15;
+          // goalText.y = 135;
+          // テキストを上下左右中央の位置にする
+          goalText.center().middle();
           // シーンにテキストを追加
           scene.add( goalText );
           // ゴールのテキストが表示されているかどうかの変数にtrueを代入
           hasDisplayedGoalText = true;
+          // 移動ができないようにする
+          isMovable = false;
         }
       }
 
-      // 方向キーが押されているときは、タイルマップの移動速度と、山田先生の向きに、それぞれの値を代入する
-      if ( game.input.left ) {
-        tilemap.vx = WALKING_SPEED;
-        yamada.direction = 1;
-      }
-      else if ( game.input.right ) {
-        tilemap.vx = -1 * WALKING_SPEED;
-        yamada.direction = 2;
-      }
-      else if ( game.input.up ) {
-        tilemap.vy = WALKING_SPEED;
-        yamada.direction = 3;
-      }
-      else if ( game.input.down ) {
-        tilemap.vy = -1 * WALKING_SPEED;
-        yamada.direction = 0;
-      }
-      // キーが押されたとき、山田先生が移動する
-      // if ( game.input.left ) tilemap.vx = WALKING_SPEED;
-      // else if ( game.input.right ) tilemap.vx = -1 * WALKING_SPEED;
-      // else if ( game.input.up ) tilemap.vy = WALKING_SPEED;
-      // else if ( game.input.down ) tilemap.vy = -1 * WALKING_SPEED;
+      // 移動可能なとき
+      if ( isMovable ) {
+        // 方向キーが押されているときは、タイルマップの移動速度と、山田先生の向きに、それぞれの値を代入する
+        if ( game.input.left ) {
+          tilemap.vx = WALKING_SPEED;
+          yamada.direction = 1;
+        }
+        else if ( game.input.right ) {
+          tilemap.vx = -1 * WALKING_SPEED;
+          yamada.direction = 2;
+        }
+        else if ( game.input.up ) {
+          tilemap.vy = WALKING_SPEED;
+          yamada.direction = 3;
+        }
+        else if ( game.input.down ) {
+          tilemap.vy = -1 * WALKING_SPEED;
+          yamada.direction = 0;
+        }
+        // キーが押されたとき、山田先生が移動する
+        // if ( game.input.left ) tilemap.vx = WALKING_SPEED;
+        // else if ( game.input.right ) tilemap.vx = -1 * WALKING_SPEED;
+        // else if ( game.input.up ) tilemap.vy = WALKING_SPEED;
+        // else if ( game.input.down ) tilemap.vy = -1 * WALKING_SPEED;
 
-      // 移動後のマップ座標を求める
-      const yamadaCoordinateAfterMoveX = yamada.mapX - tilemap.vx/WALKING_SPEED;
-      const yamadaCoordinateAfterMoveY = yamada.mapY - tilemap.vy/WALKING_SPEED;
-      // もし移動後のマップ座標に障害物があるならば、移動量に0を代入する
-      if ( tilemap.hasObstacle( yamadaCoordinateAfterMoveX, yamadaCoordinateAfterMoveY ) ) tilemap.vx = tilemap.vy = 0;
+        // 移動後のマップ座標を求める
+        const yamadaCoordinateAfterMoveX = yamada.mapX - tilemap.vx/WALKING_SPEED;
+        const yamadaCoordinateAfterMoveY = yamada.mapY - tilemap.vy/WALKING_SPEED;
+        // もし移動後のマップ座標に障害物があるならば、移動量に0を代入する
+        if ( tilemap.hasObstacle( yamadaCoordinateAfterMoveX, yamadaCoordinateAfterMoveY ) ) tilemap.vx = tilemap.vy = 0;
+      }
     }
     // タイルマップのXとY座標両方がタイルのサイズで割り切れるとき以外で、タイルの半分のサイズで割り切れるとき
     else if ( ( tilemap.x + TILE_SIZE/2 ) % ( TILE_SIZE/2 ) === 0 && ( tilemap.y + TILE_SIZE/2 ) % ( TILE_SIZE/2 ) === 0 ) {

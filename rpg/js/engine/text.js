@@ -31,7 +31,30 @@ class Text {
     this._width = 0;
     // テキストの高さ
     this._height = 0;
+    // テキストを左右中央の位置にするかどうか
+    this._isCenter = false;
+    // テキストを上下中央の位置にするかどうか
+    this._isMiddle = false;
   } // constructor() 終了
+
+  /**
+   * 呼び出すと、テキストを左右中央の位置に配置できるメソッド
+   */
+  center() {
+    // テキストを左右中央の位置に配置するかどうかのプロパティにtrueを代入
+    this._isCenter = true;
+    // thisを返すことで、メソッドをチェーンにすることができる
+    return this;
+  } // center() 終了
+
+  /**
+   * 呼び出すと、テキストを上下中央の位置に配置できるメソッド
+   */
+  middle() {
+    // テキストを上下中央の位置に配置するかどうかのプロパティにtrueを代入
+    this._isMiddle = true;
+    // thisを返すことで、メソッドをチェーンにすることができる
+  } // middle() 終了
 
   /**Gameクラスのメインループからずっと呼び出され続ける
    * 引数
@@ -52,6 +75,11 @@ class Text {
     this._width = _ctx.measureText( this.text ).width;
     // テキストの高さを計算
     this._height = Math.abs( _ctx.measureText( this.text ).actualBoundingBoxAscent ) + Math.abs( _ctx.measureText( this.text ).actualBoundingBoxAscent );
+
+    // テキストを左右中央に配置したい時の、X座標の計算
+    if ( this._isCenter ) this.x = ( canvas.width - this._width ) / 2;
+    // テキストを上下中央に配置したい時の、Y座標の計算
+    if ( this._isMiddle ) this.y = canvas.height / 2;
 
     // 画材などを画面に表示するためのメソッドを呼び出す
     this.render( canvas, _ctx );
