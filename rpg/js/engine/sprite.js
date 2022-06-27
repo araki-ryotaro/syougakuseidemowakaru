@@ -27,6 +27,8 @@ class Sprite {
     this.vx = this.vy = 0;
     // スプライトの位置を、数値の分、ずらすことができる
     this.shiftX = this.shiftY = 0;
+    // スプライトの角度
+    this.rotate = 0;
   } // constructor() 終了
 
   /**
@@ -64,6 +66,17 @@ class Sprite {
 
     // 画家さん（コンテキスト）を呼ぶ
     const _ctx = canvas.getContext( '2d' );
+    // スプライトを回転させるときの中心位置を変更するための、canvasの原点の移動量
+    const _translateX = this.x + this.width/2 + this.shiftX;
+    const _translateY = this.y + this.height/2 + this.shiftY;
+    // 描画状態を保存する
+    _ctx.save();
+    // canvasの原点の移動
+    _ctx.translate( _translateX, _translateY );
+    // canvasの回転
+    _ctx.rotate( this.rotate * Math.PI / 180 );
+    // 移動したcanvasの原点を戻す
+    _ctx.translate( -1*_translateX, -1*_translateY );
     // 画家さんに、絵を描いてとお願いする
     _ctx.drawImage(
       this.img,
@@ -76,11 +89,13 @@ class Sprite {
       this.width,
       this.height
       );
+      // 保存しておいた描画状態に戻す
+      _ctx.restore();
   } // render() 終了
 
   /**
    * 常に呼び出され、スプライトの移動やイベントの発生などに使うメソッド。空なのはオーバーライド（上書き）して使うため
    */
   onenterframe() {}
-  
+
 }

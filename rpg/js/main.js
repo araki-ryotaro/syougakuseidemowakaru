@@ -5,6 +5,8 @@ addEventListener( 'load', () => {
   // 変数gameに、あなたはゲームですよ、と教える
   // Game( 1136, 640 )と記載すると黒塗りの部分が広がる
   const game = new Game();
+  // 使いたいキーとして、スペースキーを登録する
+  game.keybind( 'space', ' ' );
 
   // タイトルシーン
   const tiltleScene = () => {
@@ -18,6 +20,12 @@ addEventListener( 'load', () => {
     titleText.center().middle();
     // シーンにテキストを追加
     scene.add( titleText );
+
+    // ループから常に呼び出される
+    scene.onenterframe = () => {
+      // スペースキーが押されたとき、メインシーンに切り替える
+      if ( game.input.space ) game.currentScene = mainScene();
+    } // scene.onenterframe() 終了
 
     // 作ったシーンを返す
     return scene;
@@ -121,6 +129,10 @@ addEventListener( 'load', () => {
             hasDisplayedGoalText = true;
             // 移動ができないようにする
             isMovable = false;
+            // 6秒たったら、タイトルシーンに切り替える
+            setTimeout( () => {
+              game.currentScene = tiltleScene();
+            }, 6000 );
           }
         }
 
