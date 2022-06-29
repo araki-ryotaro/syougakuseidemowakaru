@@ -21,6 +21,12 @@ addEventListener( 'load', () => {
     // シーンにテキストを追加
     scene.add( titleText );
 
+    // シーンがタッチされたとき
+    scene.ontouchstart = () => {
+      // メインシーンに切り替える
+      game.currentScene = mainScene();
+    } // scene.ontouchstart() 終了
+
     // ループから常に呼び出される
     scene.onenterframe = () => {
       // スペースキーが押されたとき、メインシーンに切り替える
@@ -95,6 +101,14 @@ addEventListener( 'load', () => {
     // tilemapに、山田先生のタイルを追加して、とお願いする
     tilemap.add( yamada );
 
+    // 変数dpadに、あなたはD-Padですよ、と教える
+    const dpad = new DPad( 'img/dpad.png', 80 );
+    // D-Padの位置を指定する
+    dpad.x = 10;
+    dpad.y = 230;
+    // sceneに、D-Padを追加して、とお願いする
+    scene.add( dpad );
+
     //キャラクターのアニメーションのための変数
     let toggleForAnimation = 0;
     // ゴールのテキストが表示されているかどうかの変数
@@ -139,19 +153,19 @@ addEventListener( 'load', () => {
         // 移動可能なとき
         if ( isMovable ) {
           // 方向キーが押されているときは、タイルマップの移動速度と、山田先生の向きに、それぞれの値を代入する
-          if ( game.input.left ) {
+          if ( game.input.left || dpad.arrow.left ) {
             tilemap.vx = WALKING_SPEED;
             yamada.direction = 1;
           }
-          else if ( game.input.right ) {
+          else if ( game.input.right || dpad.arrow.right ) {
             tilemap.vx = -1 * WALKING_SPEED;
             yamada.direction = 2;
           }
-          else if ( game.input.up ) {
+          else if ( game.input.up || dpad.arrow.up ) {
             tilemap.vy = WALKING_SPEED;
             yamada.direction = 3;
           }
-          else if ( game.input.down ) {
+          else if ( game.input.down || dpad.arrow.down ) {
             tilemap.vy = -1 * WALKING_SPEED;
             yamada.direction = 0;
           }

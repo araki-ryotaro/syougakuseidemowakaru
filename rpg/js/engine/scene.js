@@ -38,7 +38,7 @@ class Scene {
    * eventType : イベントのタイプ
    * fingerPosition : 指の位置
    */
-  assingnTouchevent( eventType, fingerPosition ) {
+  assignTouchevent( eventType, fingerPosition ) {
     // イベントのタイプによって呼び出すメソッドを変える
     switch ( eventType ) {
       case 'touchstart' :
@@ -58,7 +58,7 @@ class Scene {
     // シーンにあるオブジェクトの数だけ繰り返す
     for ( let i=0; i<this.objs.length; i++ ) {
       // シーンにあるオブジェクトの、タッチイベントを割り当てるためのメソッドを呼び出す
-      this.objs[i].assingnTouchevent( eventType, fingerPosition );
+      this.objs[i].assignTouchevent( eventType, fingerPosition );
     }
   } // assignTouchevent() 終了
 

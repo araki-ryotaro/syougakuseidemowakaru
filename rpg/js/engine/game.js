@@ -106,7 +106,7 @@ class Game {
     // タッチされたとき
     this.canvas.addEventListener( 'touchstart', _touchEvent, { passive: false } );
     // 指が動かされたとき
-    this.casnvas.addEventListener( 'touchmove', _touchEvent, { passive: false } );
+    this.canvas.addEventListener( 'touchmove', _touchEvent, { passive: false } );
     // 指がはなされたとき
     this.canvas.addEventListener( 'touchend', _touchEvent, { passive: false } );
   } // _setEventListener() 終了
