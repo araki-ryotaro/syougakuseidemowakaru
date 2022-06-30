@@ -48,6 +48,20 @@ class Game {
     // 現在のシーン(currentScene)に何も入っていない時は、scene[0]を代入
     this.currentScene = this.currentScene || this.scenes[0];
 
+    // ゲームがはじまったときと、ブラウザのサイズが変わったときに呼ばれる。縦横の日を変えずに、canvasを拡大縮小できる
+    const _resizeEvent = () => {
+      // ブラウザとcanvasの比率の、縦と横を計算し、小さい方を_raitoに代入する
+      const _ratio = Math.min( innerWidth / this.canvas.width, innerHeight / this.canvas.height );
+      // canvasのサイズを、ブラウザに合わせて変更する
+      this.canvas.style.width = this.canvas.width*_ratio + 'px';
+      this.canvas.style.height = this.canvas.height*_ratio + 'px';
+    } // _resizeEvent() 終了
+
+    // ブラウザのサイズが変更されたとき、_resizeを呼び出す
+    addEventListener( 'resize', _resizeEvent, { passive: true } );
+    // _resizeを呼び出す
+    _resizeEvent();
+
     // メインループを呼び出す
     this._mainLoop();
 

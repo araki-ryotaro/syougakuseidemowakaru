@@ -101,6 +101,31 @@ addEventListener( 'load', () => {
     // tilemapに、山田先生のタイルを追加して、とお願いする
     tilemap.add( yamada );
 
+    // 変数ricoに、あなたはりこちゃんのキャラクタータイルですよ、と教える
+    const rico = new CharacterTile( 'img/rico.png' );
+    // りこちゃんの位置を決める
+    rico.x = TILE_SIZE*7 - TILE_SIZE/2;
+    rico.y = TILE_SIZE*5 - TILE_SIZE/2;
+    // タイルマップの動きと同期させない
+    rico.isSynchronize = false;
+    // tilemapに、りこちゃんのキャラクタータイルを追加して、とお願いする
+    tilemap.add( rico );
+
+    // 変数aruに、あなたはアルくんのキャラクタータイルですよ、と教える
+    const aru = new CharacterTile( 'img/aru.png' );
+    // アルくんの位置を決める
+    aru.x = TILE_SIZE*7 - TILE_SIZE/2;
+    aru.y = TILE_SIZE*6 - TILE_SIZE/2;
+    // タイルマップの動きと同期させない
+    aru.isSynchronize = false;
+    // tilemapに、アルくんのキャラクタータイルを追加して、とお願いする
+    tilemap.add( aru );
+
+    // 変数partyに、あなたは山田先生とリコちゃんとアルくんのパーティですよ、教える
+    const party = new Party ( yamada, rico, aru );
+    // パーティの歩く速さに、WALKING_SPEEDの値を代入する
+    party.speed = WALKING_SPEED;
+
     // 変数dpadに、あなたはD-Padですよ、と教える
     const dpad = new DPad( 'img/dpad.png', 80 );
     // D-Padの位置を指定する
@@ -122,6 +147,10 @@ addEventListener( 'load', () => {
       if ( ( tilemap.x - TILE_SIZE/2 ) % TILE_SIZE === 0 && ( tilemap.y - TILE_SIZE/2 ) % TILE_SIZE === 0 ) {
         // タイルマップの移動速度に0を代入する
         tilemap.vx = tilemap.vy = 0;
+        // パーティ全員の移動速度に0を代入する
+        for ( let i in party.member ) {
+          party.member[i].vx = party.member[i].vy = 0;
+        }
         // 山田先生の画像を切り替える
         yamada.animation = 1;
         // 山田先生のタイルがゴールのタイルと重なっているとき、イベントを発生させる
@@ -152,20 +181,24 @@ addEventListener( 'load', () => {
 
         // 移動可能なとき
         if ( isMovable ) {
-          // 方向キーが押されているときは、タイルマップの移動速度と、山田先生の向きに、それぞれの値を代入する
+          // 方向キー、もしくはD-Padが押されているときは、setMemberVelocityメソッドを呼び出し、タイルマップの移動速度と、山田先生の向きに、それぞれの値を代入する
           if ( game.input.left || dpad.arrow.left ) {
+            party.setMemberVelocity( 'left' );
             tilemap.vx = WALKING_SPEED;
             yamada.direction = 1;
           }
           else if ( game.input.right || dpad.arrow.right ) {
+            party.setMemberVelocity( 'right' );
             tilemap.vx = -1 * WALKING_SPEED;
             yamada.direction = 2;
           }
           else if ( game.input.up || dpad.arrow.up ) {
+            party.setMemberVelocity( 'up' );
             tilemap.vy = WALKING_SPEED;
             yamada.direction = 3;
           }
           else if ( game.input.down || dpad.arrow.down ) {
+            party.setMemberVelocity( 'down' );
             tilemap.vy = -1 * WALKING_SPEED;
             yamada.direction = 0;
           }
@@ -178,8 +211,15 @@ addEventListener( 'load', () => {
           // 移動後のマップ座標を求める
           const yamadaCoordinateAfterMoveX = yamada.mapX - tilemap.vx/WALKING_SPEED;
           const yamadaCoordinateAfterMoveY = yamada.mapY - tilemap.vy/WALKING_SPEED;
-          // もし移動後のマップ座標に障害物があるならば、移動量に0を代入する
-          if ( tilemap.hasObstacle( yamadaCoordinateAfterMoveX, yamadaCoordinateAfterMoveY ) ) tilemap.vx = tilemap.vy = 0;
+          // もし移動後のマップ座標に障害物があるとき
+          if ( tilemap.hasObstacle( yamadaCoordinateAfterMoveX, yamadaCoordinateAfterMoveY ) ) {
+            // 移動量に0を代入する
+            tilemap.vx = tilemap.vy = 0;
+            // パーティ全員の移動速度に0を代入する
+            for ( let i in party.member ) {
+              party.member[i].vx = party.member[i].vy = 0;
+            }
+          }
         }
       }
       // タイルマップのXとY座標両方がタイルのサイズで割り切れるとき以外で、タイルの半分のサイズで割り切れるとき
