@@ -147,12 +147,15 @@ addEventListener( 'load', () => {
       if ( ( tilemap.x - TILE_SIZE/2 ) % TILE_SIZE === 0 && ( tilemap.y - TILE_SIZE/2 ) % TILE_SIZE === 0 ) {
         // タイルマップの移動速度に0を代入する
         tilemap.vx = tilemap.vy = 0;
-        // パーティ全員の移動速度に0を代入する
+        // パーティ全員の数だけを繰り返す
         for ( let i in party.member ) {
+          // パーティ全員の移動速度を0にする
           party.member[i].vx = party.member[i].vy = 0;
+          // パーティ全員の画像を切り替える
+          party.member[i].animation = 1;
         }
-        // 山田先生の画像を切り替える
-        yamada.animation = 1;
+        // 山田先生の画像を切り替える（削除）
+        // yamada.animation = 1;（削除）
         // 山田先生のタイルがゴールのタイルと重なっているとき、イベントを発生させる
         if ( yamada.isOverlapped( goal ) ) {
           // ゴールのテキストが表示されていない時
@@ -220,17 +223,23 @@ addEventListener( 'load', () => {
               party.member[i].vx = party.member[i].vy = 0;
             }
           }
+
+          // タイルマップが動いているとき、パーティメンバーの向きを変える
+          if ( tilemap.vx !== 0 || tilemap.vy !== 0 ) party.setMemberDirection();
         }
       }
       // タイルマップのXとY座標両方がタイルのサイズで割り切れるとき以外で、タイルの半分のサイズで割り切れるとき
       else if ( ( tilemap.x + TILE_SIZE/2 ) % ( TILE_SIZE/2 ) === 0 && ( tilemap.y + TILE_SIZE/2 ) % ( TILE_SIZE/2 ) === 0 ) {
         // 0と1を交互に取得できる
         toggleForAnimation ^= 1;
-        // toggleForAnimationの数値によって、山田先生の画像を切り替える
-        if ( toggleForAnimation === 0 ) yamada.animation = 2;
-        else yamada.animation = 0;
-        // コンソールにマップ座標を表示
-        // console.log( `${yamada.mapX} ${yamada.mapY}` );（削除）
+        // パーティメンバーの数だけ繰り返す
+        for ( let i in party.member ) {
+          // toggleForAnimationの数値によって、山田先生の画像を切り替える
+          if ( toggleForAnimation === 0 ) yamada.animation = 2;
+          else party.member[i].animation = 0;
+          // コンソールにマップ座標を表示
+          // console.log( `${yamada.mapX} ${yamada.mapY}` );（削除）
+        }
       }
     } // scene.onenterframe 終了
 

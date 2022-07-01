@@ -16,6 +16,23 @@ class Party {
   } // constructor() 終了
 
   /**
+   * 戦闘以外のキャラの、向きを設定するためのメソッド
+   */
+  setMemberDirection() {
+    // 先頭のキャラ以外の数だけを繰り返す
+    for ( let i=1; i<this.member.length; i++ ) {
+      // ひとつ前のキャラよりもX座標が大きいとき、左向きにする
+      if ( this.member[i-1].mapX < this.member[i].mapX ) this.member[i].direction = 1;
+      // ひとつ前のキャラよりもX座標が小さいとき、右向きにする
+      else if ( this.member[i-1].mapX > this.member[i].mapX ) this.member[i].direction = 2;
+      // ひとつ前のキャラよりもY座標が大きいとき、後ろ向きにする
+      else if ( this.member[i-1].mapY < this.member[i].mapY ) this.member[i].direction = 3;
+      // ひとつ前のキャラよりもY座標が小さいとき、前向きにする
+      else if ( this.member[i-1].mapY > this.member[i].mapY ) this.member[i].direction = 0;
+    }
+  } // setMemberDirection() 終了
+  
+  /**
    * 戦闘以外のキャラの、移動速度を設定するためのメソッド
    * 引数
    * direction : 先頭のキャラの移動方向
