@@ -81,4 +81,10 @@ class Scene {
    * 指がはなされたときに呼び出される
    */
   ontouchend() {}
+
+  /**
+   * シーンが切り替わったときに呼び出される
+   */
+  onchangescene() {}
+  
 }

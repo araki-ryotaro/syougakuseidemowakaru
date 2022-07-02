@@ -26,6 +26,10 @@ class Game {
     // 現在のシーンを入れておくためのもの
     this.currentScene;
 
+
+    // 現在のシーンを一時的に入れておくためのもの。シーンが切り替わったかどうかを判断するのに使う
+    this._temporaryCurrentScene;
+
     // ゲームに使用するキーと、そのキーが押されているかどうかを入れるための連想配列
     // 例 { up: false, down: false }
     this.input = {};
@@ -139,6 +143,9 @@ class Game {
     // 現在のシーンのupdateメソッドを呼び出す
     this.currentScene.update();
 
+    // 一時的に入れておいたシーンが現在のシーンでないとき、（シーンが切り替わったとき）、現在のシーンのonchangesceneメソッドを呼び出す
+    if ( this._temporaryCurrentScene !== this.currentScene ) this.currentScene.onchangescene();
+
     // ゲームに登場する全てのもの（オブジェクト）の数だけ繰り返す
     // 現在のシーンの、ゲームに登場するすべてのもの（オブジェクト）の数だけ繰り返す
     for ( let i=0; i<this.currentScene.objs.length; i++ ) {
@@ -146,6 +153,9 @@ class Game {
       // 現在のシーンの、すべてのオブジェクトのupdateメソッドを呼び出す
       this.currentScene.objs[i].update( this.canvas );
     }
+
+    // 現在のシーンを覚えておいてもらう
+    this._temporaryCurrentScene = this.currentScene;
 
     // 自分自身（_mainLoop）を呼び出して、ループさせる
     requestAnimationFrame( this._mainLoop.bind( this ) );
