@@ -26,6 +26,8 @@ class Game {
     // 現在のシーンを入れておくためのもの
     this.currentScene;
 
+    // プリロードは、ゲームのメイン部分が始まる前に動かしたいので、それを入れておくための配列
+    this._temporaryCurrentScene;
 
     // 現在のシーンを一時的に入れておくためのもの。シーンが切り替わったかどうかを判断するのに使う
     this._temporaryCurrentScene;
@@ -38,6 +40,18 @@ class Game {
     this._keys = {};
   } // constructor() 終了
 
+  /**
+   * プリロードのためのメソッド
+   * 引数には、使いたい素材を制限なく入れることが出来る
+   */
+  preload() {
+    // 引数の素材を_assetsに追加
+    const _assets = arguments;
+    // 素材の数だけ繰り返す
+    for ( let i=0; i<_assets.length; i++ ) {
+
+    }
+  }
 
   /**
    * startメソッドを呼び出すことで、メインループが開始される
