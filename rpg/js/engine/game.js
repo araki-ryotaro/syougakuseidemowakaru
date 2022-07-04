@@ -26,8 +26,15 @@ class Game {
     // 現在のシーンを入れておくためのもの
     this.currentScene;
 
+    // 音声を入れておくためのもの
+    this.sounds = [];
+    // 画面がすでにタッチされたかどうか
+    this._isAlreadyTouched = false;
+    // 設定が終わったかどうか
+    this._hasFinishedSetting = false;
+
     // プリロードは、ゲームのメイン部分が始まる前に動かしたいので、それを入れておくための配列
-    this._temporaryCurrentScene;
+    this._preloadPromises = [];
 
     // 現在のシーンを一時的に入れておくためのもの。シーンが切り替わったかどうかを判断するのに使う
     this._temporaryCurrentScene;
@@ -49,9 +56,49 @@ class Game {
     const _assets = arguments;
     // 素材の数だけ繰り返す
     for ( let i=0; i<_assets.length; i++ ) {
-
+      // _preloadPromises[i]に、あなたはプリロードのプロミス（非同期処理をやりやすくする）だよ、と教える
+      this._preloadPromises[i] = new Promise( ( resolve, reject ) => {
+        // もしそのファイルの拡張子が、jpg、jpeg、png、gifのどれかのとき
+        if ( _assets[i].match( /\.(jpg|jpeg|png|gif)$/i ) ) {
+          // _imgに、あなたは画像ですよと、教える
+          let _img = new Image();
+          // img.srcに、引数で指定した画像ファイルを代入
+          _img.src = _assets[i];
+    
+          // 画像が読み込み終わったら、成功という事で、resolve()を呼び出す
+          _img.addEventListener( 'load', () => {
+            resolve();
+          }, { passive: true, once: true } );
+    
+          // 画像が読み込めなければ、エラーということで、reject()を呼び出す
+          _img.addEventListener( 'error', () => {
+            reject( `「${_assets[i]}」は読み込めないよ！` );
+          }, { passive: true, once: true } );
+        }
+        // ファイル拡張子がどれでもないとき
+        else {
+          // エラーという事で、reject()を呼び出す
+          reject( `「${_assets[i]}」の形式は、プリロードに対応していないよ！` );
+        }
+      } );
     }
-  }
+  } // preload() 終了
+  
+  /**
+   * プリロードなどの設定が終わった後に実行する
+   * 引数
+   * callback : プリロードなどの設定が終わった後に実行したいプログラム。今回はゲームメインの部分
+   */
+  main( callback ) {
+    // ゲームが始まる前に実行しておきたいもの（今回はプリロード）が、全て成功したあとに、実行したかったゲームのメイン部分「callback()」を実行
+    // 失敗したときはコンソールにエラーを表示
+    Promise.all( this._preloadPromises ).then( result => {
+      callback();
+    } ).catch( reject => {
+      console.error( reject );
+    } );
+  } // main() 終了
+
 
   /**
    * startメソッドを呼び出すことで、メインループが開始される
