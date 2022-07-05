@@ -6,7 +6,7 @@ addEventListener( 'load', () => {
   // Game( 1136, 640 )と記載すると黒塗りの部分が広がる
   const game = new Game();
   // ゲームに使う画像などの素材を先に読み込んでおく（プリロード）
-  game.preload( 'img/yamada.png', 'img/rico.png', 'img/aru.png', 'img/start.png', 'img/goal.png', 'img/title.png', 'img/dpad.png' );
+  game.preload( 'img/yamada.png', 'img/rico.png', 'img/aru.png', 'img/start.png', 'img/goal.png', 'img/tile.png', 'img/dpad.png', 'sound/bgm.mp3', 'sound/start.mp3', 'sound/clear.mp3' );
   // 使いたいキーとして、スペースキーを登録する
   game.keybind( 'space', ' ' );
   // ゲームを開始する準備ができたあとに実行する
@@ -24,6 +24,14 @@ addEventListener( 'load', () => {
       titleText.center().middle();
       // シーンにテキストを追加
       scene.add( titleText );
+
+      // シーンが切り替わったときに、一度だけ呼ばれる
+      scene.onchangescene = () => {
+        // clear.mp3をストップ
+        game.sounds[ 'sound/clear.mp3' ].stop();
+        // start.mp3を再生
+        game.sounds[ 'sound/start.mp3' ].start();
+      }
   
       // シーンがタッチされたとき
       scene.ontouchstart = () => {
@@ -46,7 +54,6 @@ addEventListener( 'load', () => {
     const mainScene = () => {
   
       // （削除）
-      /*
       // マップの作製
       const map = [
         [11,11,11,11,11,11,11,11,11,11],
@@ -60,7 +67,6 @@ addEventListener( 'load', () => {
         [11, 4, 4, 4, 4, 4, 4,11, 4,11],
         [11,11,11,11,11,11,11,11,11,11],
       ];
-      */
       // タイルのサイズ
       const TILE_SIZE = 32;
       // 歩く速さ
@@ -92,8 +98,8 @@ addEventListener( 'load', () => {
       // 変数goalに、あなたはゴールのタイルですよ、と教える
       const goal = new Tile( 'img/goal.png' );
       // マップ左上からの座標を指定する
-      goal.x = TILE_SIZE*98;
-      goal.y = TILE_SIZE*98;
+      goal.x = TILE_SIZE*8;
+      goal.y = TILE_SIZE*8;
       // ゴールのタイルを、tilemapに追加して、とお願いする
       tilemap.add( goal );
   
@@ -140,6 +146,14 @@ addEventListener( 'load', () => {
       dpad.y = 230;
       // sceneに、D-Padを追加して、とお願いする
       scene.add( dpad );
+
+      // シーンが切り替わったときに、一度だけ呼ばれる
+      scene.onchangescene = () => {
+        // start.mp3をストップ
+        game.sounds[ 'sound/start.mp3' ].stop();
+        // bgm.mp3をループ再生
+        game.sounds[ 'sound/bgm.mp3' ].loop();
+      }
   
       //キャラクターのアニメーションのための変数
       let toggleForAnimation = 0;
@@ -182,6 +196,10 @@ addEventListener( 'load', () => {
               hasDisplayedGoalText = true;
               // 移動ができないようにする
               isMovable = false;
+              // bgm.mp3をストップ
+              game.sounds[ 'sound/bgm.mp3' ].stop();
+              // clear.mp3を再生
+              game.sounds[ 'sound/clear.mp3' ].start();
               // 6秒たったら、タイトルシーンに切り替える
               setTimeout( () => {
                 game.currentScene = tiltleScene();
