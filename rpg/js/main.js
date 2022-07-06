@@ -54,6 +54,7 @@ addEventListener( 'load', () => {
     const mainScene = () => {
   
       // （削除）
+      /*
       // マップの作製
       const map = [
         [11,11,11,11,11,11,11,11,11,11],
@@ -67,6 +68,7 @@ addEventListener( 'load', () => {
         [11, 4, 4, 4, 4, 4, 4,11, 4,11],
         [11,11,11,11,11,11,11,11,11,11],
       ];
+      */
       // タイルのサイズ
       const TILE_SIZE = 32;
       // 歩く速さ
@@ -98,8 +100,8 @@ addEventListener( 'load', () => {
       // 変数goalに、あなたはゴールのタイルですよ、と教える
       const goal = new Tile( 'img/goal.png' );
       // マップ左上からの座標を指定する
-      goal.x = TILE_SIZE*8;
-      goal.y = TILE_SIZE*8;
+      goal.x = TILE_SIZE*98;
+      goal.y = TILE_SIZE*98;
       // ゴールのタイルを、tilemapに追加して、とお願いする
       tilemap.add( goal );
   
